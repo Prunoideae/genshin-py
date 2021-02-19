@@ -1,11 +1,11 @@
 from typing import Dict, List
 from genshin.enums.attr_type import BodyType, IdentityType, QualityType, UseType, WeaponType
-from genshin.adapter import Adapter, ConfigAdapter, JsonAdapter, MappedAdapter
+from genshin.adapter import Adapter, ConfigAdapter, IdAdapter, JsonAdapter, MappedAdapter
 from genshin.tags import TagGroup, TagGroupConfig
-from genshin.textmap import Localizable, TextMap
+from genshin.textmap import Localizable, LocalizeAdapter, TextMap
 
 
-class Avatar(JsonAdapter):
+class Avatar(LocalizeAdapter):
     id: Adapter("Id", int)
     ranged: Adapter("IsRangeAttack", bool)
 
@@ -29,19 +29,11 @@ class Avatar(JsonAdapter):
 
     body_type: Adapter("BodyType", BodyType)
     weapon_type: Adapter("WeaponType", WeaponType)
-    feature_tags: Adapter("FeatureTagGroupID", TagGroup, lambda x: x)
-
-    def __init__(self, entry: Dict, textmap: TextMap, tag_group: TagGroupConfig) -> None:
-        super().__init__(entry)
-        self.feature_tags = tag_group.mappings[self.feature_tags]
-        self.name.set(textmap)
-        self.desc.set(textmap)
-        self.info.set(textmap)
+    feature_tags: IdAdapter("FeatureTagGroupID", TagGroupConfig)
 
     def __repr__(self) -> str:
         return f"<{self.name.localize()} {self.id}>"
 
 
 class AvatarConfig(MappedAdapter[Avatar]):
-    def __init__(self, entries: List[Dict], textmap: TextMap, tag_group: TagGroupConfig) -> None:
-        super().__init__(entries, additional=[textmap, tag_group])
+    pass

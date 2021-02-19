@@ -1,25 +1,15 @@
+from os import name
+from genshin.enums.attr_type import ArtiAttrType
 from genshin.artiprops import AppendDepot, AppendDepots, MainDepot, MainDepots
-from types import FunctionType
 from genshin.enums.target import EquipPart, UseTarget
 from genshin.enums.item_type import ItemType, MaterialType, FoodQuality
-from genshin.adapter import Adapter, JsonAdapter, MappedAdapter
-from typing import Any, Callable, Dict, List, Text, Union
-from genshin.textmap import Localizable, TextMap
+from genshin.adapter import Adapter, ConfigAdapter, IdAdapter, JsonAdapter, MappedAdapter
+from typing import Dict, List, Union
+from genshin.textmap import Localizable, LocalizeAdapter, TextMap
+from genshin.utils import ItemStack, WeightedItemStack
 
 
-class ItemStack():
-    def __init__(self, id, count: int) -> None:
-        self.id = id
-        self.count = count
-
-
-class WeightedItemStack(ItemStack):
-    def __init__(self, id, count: int, weight: int) -> None:
-        super().__init__(id, count)
-        self.weight = weight
-
-
-class MaterialEntry(JsonAdapter):
+class MaterialEntry(LocalizeAdapter):
     id: Adapter("Id", int)
     rank: Adapter("RankLevel", int)
     stacksize: Adapter("StackLimit", int)
@@ -46,8 +36,8 @@ class MaterialEntry(JsonAdapter):
     food_quality: Adapter("FoodQuality", FoodQuality)
     hunger_value: Adapter("SatiationParams", int, transformer=lambda x: x[1] if x else 0)
 
-    name_text: Adapter("NameTextMapHash", Localizable)
-    desc_text: Adapter("DescTextMapHash", Localizable)
+    name: Adapter("NameTextMapHash", Localizable)
+    desc: Adapter("DescTextMapHash", Localizable)
     type_text: Adapter("TypeDescTextMapHash", Localizable)
     interaction_text: Adapter("InteractionTitleTextMapHash", Localizable)
     special_text: Adapter("SpecialDescTextMapHash", Localizable)
@@ -65,30 +55,24 @@ class MaterialEntry(JsonAdapter):
     item_use: Adapter("ItemUse", list, lambda x: x)
     pic_path: Adapter("PicPath", list, lambda x: x)
 
-    def __init__(self, entry: Dict, textmap: TextMap) -> None:
+    def __init__(self, entry: Dict) -> None:
         super().__init__(entry)
-        self.localize(textmap)
         if self.can_destroy:
             self.recover_list = list(ItemStack(*x) for x in zip(entry['DestroyReturnMaterial'], entry['DestroyReturnMaterialCount']))
+        else:
+            self.recover_list = None
 
     def __repr__(self) -> str:
-        return f"<{self.name_text.localize()} {self.id}>"
-
-    def localize(self, textmap: TextMap):
-        self.name_text.set(textmap)
-        self.desc_text.set(textmap)
-        self.type_text.set(textmap)
-        self.interaction_text.set(textmap)
-        self.special_text.set(textmap)
-        self.effect_text.set(textmap)
+        return f"<{self.name.localize()} {self.id}>"
 
 
 class MaterialConfig(MappedAdapter[MaterialEntry]):
-    def __init__(self, entries: List[Dict], textmap: TextMap) -> None:
-        super().__init__(entries, [textmap])
+    def __init__(self, entries: List[Dict]) -> None:
+        super().__init__(entries)
+        ItemStack.set_instance(self)
 
 
-class ArtifactEntry(JsonAdapter):
+class ArtifactEntry(LocalizeAdapter):
     id: Adapter("Id", int)
     rank: Adapter("RankLevel", int)
     weight: Adapter("Weight", int)
@@ -100,35 +84,81 @@ class ArtifactEntry(JsonAdapter):
     max_level: Adapter("MaxLevel", int)
     base_exp: Adapter("BaseConvExp", int)
 
-    main_depot: Adapter("MainPropDepotId", List[MainDepot], lambda x: x)
+    main_depot: IdAdapter("MainPropDepotId", MainDepots)
     append_depot: Adapter("AppendPropDepotId", List[AppendDepot], lambda x: x)
 
     can_drop: Adapter("Dropable", bool)
     equip_type: Adapter("EquipType", EquipPart)
 
-    name_text: Adapter("NameTextMapHash", Localizable)
-    desc_text: Adapter("DescTextMapHash", Localizable)
+    name: Adapter("NameTextMapHash", Localizable)
+    desc: Adapter("DescTextMapHash", Localizable)
 
     can_destroy: Adapter("DestroyRule", bool, lambda x: x == "DESTROY_RETURN_MATERIAL", lambda x: False)
-    recover_list: Union[List, None]
+    recover_list: Union[List[ItemStack], None]
 
-    def __init__(self, entry: Dict, textmap: TextMap, main_depot: MainDepots, app_depot: AppendDepots) -> None:
+    def __init__(self, entry: Dict) -> None:
         super().__init__(entry)
-        self.localize(textmap)
-        self.main_depot = main_depot.mappings[self.main_depot]
-        self.append_depot = app_depot.mappings[self.append_depot]
-
         if self.can_destroy:
             self.recover_list = list(ItemStack(*x) for x in zip(entry['DestroyReturnMaterial'], entry['DestroyReturnMaterialCount']))
+        else:
+            self.recover_list = None
 
     def __repr__(self) -> str:
-        return f"<{self.name_text.localize()} {self.id}>"
-
-    def localize(self, textmap: TextMap):
-        self.name_text.set(textmap)
-        self.desc_text.set(textmap)
+        return f"<{self.rank}* {self.name.localize()} {self.id}>"
 
 
 class ArtifactConfig(MappedAdapter[ArtifactEntry]):
-    def __init__(self, entries: List[Dict], textmap: TextMap, main: MainDepots, app: AppendDepots) -> None:
-        super().__init__(entries, [textmap, main, app])
+    def __init__(self, entries: List[Dict]) -> None:
+        super().__init__(entries)
+        ItemStack.set_instance(self)
+
+
+class WeaponEntry(LocalizeAdapter):
+    id: Adapter("Id", int)
+    level: Adapter("RankLevel", int)
+    exp: Adapter("WeaponBaseExp", int)
+    skills: Adapter("SkillAffix", List[int], lambda x: [y for y in x if y != 0])
+    item_type: Adapter("ItemType", ItemType)
+    weight: Adapter("Weight", int)
+    __rank: Adapter("Rank", int)
+    name: Adapter("NameTextMapHash", Localizable)
+    desc: Adapter("DescTextMapHash", Localizable)
+
+    gadget_id: Adapter("GadgetId", int)
+
+    __weapon_pros: Adapter("WeaponProp", List[Dict], lambda x: x)
+    base_atk: float
+    base_curve: str
+    substat: Union[ArtiAttrType, None]
+    substat_base: float
+    substat_curve: str
+
+    awaken_texture: Adapter("AwakenTexture")
+    awaken_icon: Adapter("AwakenIcon")
+    icon: Adapter("Icon")
+
+    unrotate: Adapter("UnRotate", bool)
+
+    promote_id: Adapter("WeaponPromoteId", int)
+    refine_costs: Adapter("AwakenCosts", List[int], lambda x: x)
+
+    story_id: Adapter("StoryId", int)
+
+    def __init__(self, entry: Dict) -> None:
+        super().__init__(entry)
+        self.base_atk = self.__weapon_pros[0]["InitValue"]
+        self.base_curve = self.__weapon_pros[0]["Type"]
+        if "PropType" in self.__weapon_pros[1]:
+            self.substat = ArtiAttrType(self.__weapon_pros[1]["PropType"])
+            self.substat_base = self.__weapon_pros[1]["InitValue"]
+            self.substat_curve = self.__weapon_pros[1]["Type"]
+        else:
+            self.substat = None
+            self.substat_base = 0
+            self.substat_curve = ""
+
+
+class WeaponConfig(MappedAdapter[WeaponEntry]):
+    def __init__(self, entries: List[Dict]) -> None:
+        super().__init__(entries)
+        ItemStack.set_instance(self)

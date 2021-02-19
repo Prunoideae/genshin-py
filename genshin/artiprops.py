@@ -1,6 +1,6 @@
 from typing import Dict, List
 from genshin.enums.attr_type import ArtiAttrType
-from .adapter import Adapter, ConfigAdapter, JsonAdapter, MappedAdapter
+from .adapter import Adapter, JsonAdapter, MappedAdapter
 
 
 class MainDepot(JsonAdapter):
@@ -27,7 +27,7 @@ class AppendDepot(JsonAdapter):
         return f"<{self.prop_type.name} {self.weight} {self.prop_value:.2f}>"
 
 
-class MainDepots(MappedAdapter[MainDepot]):
+class MainDepots(MappedAdapter[List[MainDepot]]):
     def __init__(self, entry: List[Dict]) -> None:
         self.mappings: Dict[int, List[MainDepot]] = {}
         self.entries = [MainDepot(x) for x in entry]
@@ -36,9 +36,10 @@ class MainDepots(MappedAdapter[MainDepot]):
                 self.mappings[x.depot_id] = []
             if x.weight is not None:
                 self.mappings[x.depot_id].append(x)
+        self.__class__.__inst__ = self
 
 
-class AppendDepots(MappedAdapter[AppendDepot]):
+class AppendDepots(MappedAdapter[List[AppendDepot]]):
     def __init__(self, entry: List[Dict]) -> None:
         self.mappings: Dict[int, List[AppendDepot]] = {}
         self.entries = [AppendDepot(x) for x in entry]
@@ -46,3 +47,4 @@ class AppendDepots(MappedAdapter[AppendDepot]):
             if x.depot_id not in self.mappings:
                 self.mappings[x.depot_id] = []
             self.mappings[x.depot_id].append(x)
+        self.__class__.__inst__ = self

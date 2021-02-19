@@ -1,10 +1,11 @@
+from genshin.rewards import RewardConfig
+from genshin.events import TrialAvatarConfig, TrialDataConfig, TrialSetConfig
 from genshin.tags import TagConfig, TagGroupConfig
-from genshin.items import ArtifactConfig, MaterialConfig
-import json
+from genshin.items import ArtifactConfig, MaterialConfig, WeaponConfig
 from genshin.artiprops import AppendDepots, MainDepots
 from genshin.textmap import TextMap
-from genshin.entities import Avatar, AvatarConfig
-
+from genshin.entities import AvatarConfig
+import json
 from os import path
 
 
@@ -25,10 +26,13 @@ class RepoData():
         self.skill_depot = None
 
         # Entities
-        self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"))),
-                                        self.textmap, self.main_depot, self.app_depot)
-        self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"))), self.textmap)
-        self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"))), self.textmap, self.tag_groups)
+        self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"))))
+        self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"))))
+        self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path,"WeaponExcelConfigData.json"))))
+        self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"))))
 
-    def localize(self):
-        pass
+        self.rewards = RewardConfig(json.load(open(path.join(self.excel_path, "RewardExcelConfigData.json"))))
+        self.trial_avatars = TrialAvatarConfig(
+            json.load(open(path.join(self.excel_path, "TrialAvatarExcelConfigData.json"))), self.avatars)
+        self.trials = TrialDataConfig(json.load(open(path.join(self.excel_path, "TrialAvatarActivityDataExcelConfigData.json"))), self.trial_avatars)
+        self.trialsets = TrialSetConfig(json.load(open(path.join(self.excel_path, "TrialAvatarActivityExcelConfigData.json"))), self.trials)

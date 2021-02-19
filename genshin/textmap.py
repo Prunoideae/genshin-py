@@ -1,6 +1,7 @@
+from genshin.adapter import AdapterInst, JsonAdapter
 from io import UnsupportedOperation
 from os import path
-from typing import Union
+from typing import Dict, List, Union
 import json
 
 
@@ -8,9 +9,10 @@ class TextMap():
     def __init__(self, textmap: str, name: str) -> None:
         self.__path__ = path.join(textmap, f"Text{name}.json")
         self.__maps__ = json.load(open(self.__path__))
+        self.__class__.__inst__ = self
 
-    def reload(self, textmap: str, name: str):
-        self.__path__ = path.join(textmap, f"Text{name}.json")
+    def reload(self, name: str, textmap: str = None):
+        self.__path__ = path.join(textmap if textmap is not None else path.dirname(self.__path__), f"Text{name}.json")
         self.__maps__ = json.load(open(self.__path__))
 
     def __getitem__(self, k: Union[str, int]) -> Union[None, str]:
@@ -53,3 +55,12 @@ class Localizable():
             return False
         else:
             return o in r
+
+
+class LocalizeAdapter(JsonAdapter):
+
+    def __init__(self, entries: List[Dict]) -> None:
+        super().__init__(entries)
+        for k, v in self.__annotations__.items():
+            if isinstance(v, AdapterInst) and v.adapter == Localizable:
+                self.__dict__[k].set(TextMap.__inst__)

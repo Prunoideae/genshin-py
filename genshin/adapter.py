@@ -1,5 +1,4 @@
 
-
 from typing import Any, Callable, Dict, Generic, List, Type, TypeVar, Union
 from types import FunctionType
 import typing
@@ -11,7 +10,7 @@ A simple json adapter for reducing redundant works.
 T = TypeVar("T")
 
 
-def Adapter(source: str, adapter: T = str, transformer: None = None, fallback: FunctionType = lambda x: None) -> T:
+def Adapter(source: str, adapter: T = str, transformer: None = None, fallback: Callable[[str], Any] = lambda x: None) -> T:
     '''
     Adapter marks a field in JsonAdapter's subclass to be able to take value from key `source`, and transform it with
     `adapter` or `transformer`, and return `fallback` when key doesn't exist.
@@ -55,6 +54,7 @@ class ConfigAdapter(Generic[T]):
     def __init__(self, entries: List[Dict], additional: List = []) -> None:
         adapter = typing.get_args(self.__orig_bases__[0])[0]
         self.entries: List[T] = [adapter(x, *additional) for x in entries]
+        self.__class__.__inst__ = self
 
     def find(self, property: str, value: Any) -> List[T]:
         result = []
@@ -77,6 +77,12 @@ class ConfigAdapter(Generic[T]):
                 result.append(entry)
         return result
 
+    def match_first(self, predicate: Callable[[T], bool]) -> Union[T, None]:
+        for entry in self.entries:
+            if predicate(entry):
+                return entry
+        return None
+
 
 class MappedAdapter(ConfigAdapter[T]):
     def __init__(self, entries: List[Dict], additional: List = []) -> None:
@@ -85,3 +91,7 @@ class MappedAdapter(ConfigAdapter[T]):
 
     def __getitem__(self, k: object):
         return self.mappings[k]
+
+
+def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> T:
+    return AdapterInst(source, lambda x: config.__inst__[x])
