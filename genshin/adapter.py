@@ -8,9 +8,10 @@ A simple json adapter for reducing redundant works.
 '''
 
 T = TypeVar("T")
+TF = TypeVar("TF")
 
 
-def Adapter(source: str, adapter: T = str, transformer: None = None, fallback: Callable[[str], Any] = lambda x: None) -> T:
+def Adapter(source: str, adapter: T = str, transformer: None = None, fallback: Callable[[str], TF] = lambda x: None) -> Union[T, TF]:
     '''
     Adapter marks a field in JsonAdapter's subclass to be able to take value from key `source`, and transform it with
     `adapter` or `transformer`, and return `fallback` when key doesn't exist.
@@ -93,5 +94,5 @@ class MappedAdapter(ConfigAdapter[T]):
         return self.mappings[k]
 
 
-def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> T:
+def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> Union[T, None]:
     return AdapterInst(source, lambda x: config.__inst__[x])

@@ -1,3 +1,4 @@
+from genshin.battlepass import BPMissionConfig, BPScheduleConfig
 from genshin.rewards import RewardConfig
 from genshin.events import TrialAvatarConfig, TrialDataConfig, TrialSetConfig
 from genshin.tags import TagConfig, TagGroupConfig
@@ -28,11 +29,16 @@ class RepoData():
         # Entities
         self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"))))
         self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"))))
-        self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path,"WeaponExcelConfigData.json"))))
+        self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path, "WeaponExcelConfigData.json"))))
         self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"))))
 
         self.rewards = RewardConfig(json.load(open(path.join(self.excel_path, "RewardExcelConfigData.json"))))
-        self.trial_avatars = TrialAvatarConfig(
-            json.load(open(path.join(self.excel_path, "TrialAvatarExcelConfigData.json"))), self.avatars)
+
+        # Trials
+        self.trial_avatars = TrialAvatarConfig(json.load(open(path.join(self.excel_path, "TrialAvatarExcelConfigData.json"))), self.avatars)
         self.trials = TrialDataConfig(json.load(open(path.join(self.excel_path, "TrialAvatarActivityDataExcelConfigData.json"))), self.trial_avatars)
         self.trialsets = TrialSetConfig(json.load(open(path.join(self.excel_path, "TrialAvatarActivityExcelConfigData.json"))), self.trials)
+
+        # BP
+        self.bp_schedule = BPScheduleConfig(json.load(open(path.join(self.excel_path, "BattlePassScheduleExcelConfigData.json"))))
+        self.bp_mission = BPMissionConfig(json.load(open(path.join(self.excel_path, "BattlePassMissionExcelConfigData.json"))))
