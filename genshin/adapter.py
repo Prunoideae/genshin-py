@@ -95,4 +95,4 @@ class MappedAdapter(ConfigAdapter[T]):
 
 
 def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> Union[T, None]:
-    return AdapterInst(source, lambda x: config.__inst__[x])
+    return AdapterInst(source, lambda x: config.__inst__[x] if x in config.__inst__.mappings else None)

@@ -4,6 +4,4 @@ from genshin.genshin import RepoData
 
 repo = RepoData("./GenshinData")
 
-
-for x in repo.bp_mission.match(lambda x: x.schedule is not None and x.schedule.id == 1300):
-    print(str(x.exp) + " " + x.desc.localize())
+print(repo.trialsets.match_first(lambda x: x.trials[0].avatar_data.avatar.name == "Hu Tao").trials[0])

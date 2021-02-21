@@ -1,6 +1,6 @@
 from genshin.textmap import Localizable, LocalizeAdapter, TextMap
 from typing import Dict, List
-from genshin.adapter import Adapter, JsonAdapter, ConfigAdapter, MappedAdapter
+from genshin.adapter import Adapter, IdAdapter, JsonAdapter, ConfigAdapter, MappedAdapter
 from genshin.entities import Avatar, AvatarConfig
 
 
@@ -16,6 +16,9 @@ class TrialAvatar(JsonAdapter):
         self.avatar = avatar_config[self.__avatar_param_list[0]]
         self.level = self.__avatar_param_list[1]
 
+    def __repr__(self) -> str:
+        return f"<{self.avatar.name.localize()} {self.level}>"
+
 
 class TrialAvatarConfig(MappedAdapter[TrialAvatar]):
     def __init__(self, entries: List[Dict], avatars: AvatarConfig) -> None:
@@ -25,7 +28,7 @@ class TrialAvatarConfig(MappedAdapter[TrialAvatar]):
 class TrialData(LocalizeAdapter):
     id: Adapter("TrialAvatarIndexId", int)
     id_internal: Adapter("Id", int)
-    avatar: Adapter("TrialAvatarId", TrialAvatar, lambda x: x)
+    avatar_data: IdAdapter("TrialAvatarId", TrialAvatarConfig)
     dungeon: Adapter("DungeonId", int)
     support_avatars: Adapter("BattleAvatarsList", List[Avatar], lambda x: [int(y) for y in x.split(",")])
     reward: Adapter("FirstPassReward", int)
@@ -34,11 +37,10 @@ class TrialData(LocalizeAdapter):
 
     def __init__(self, entry: Dict, trial_config: TrialAvatarConfig) -> None:
         super().__init__(entry)
-        self.avatar = trial_config[self.avatar]
         self.support_avatars = [trial_config[x] for x in self.support_avatars]
 
     def __repr__(self) -> str:
-        return f"<{self.avatar.avatar.name.localize()} {self.avatar.level}>"
+        return f"<{self.avatar_data.avatar.name.localize()} {self.avatar_data.level}>"
 
 
 class TrialDataConfig(MappedAdapter[TrialData]):
@@ -58,6 +60,14 @@ class TrialSet(JsonAdapter):
         return [x for x in self.trials].__repr__()
 
 
-class TrialSetConfig(ConfigAdapter[TrialSet]):
+class TrialSetConfig(MappedAdapter[TrialSet]):
     def __init__(self, entries: List[Dict], trials: TrialDataConfig) -> None:
         super().__init__(entries, additional=[trials])
+
+
+class Activity(LocalizeAdapter):
+    pass
+
+
+class ActivityConfig(MappedAdapter[Activity]):
+    pass

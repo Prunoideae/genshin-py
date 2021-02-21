@@ -1,14 +1,18 @@
 from genshin.enums.attr_type import ElementType
 from genshin.enums.displays import DragType, LockShape
-from genshin.adapter import Adapter, JsonAdapter
-from genshin.textmap import Localizable
+from genshin.adapter import Adapter, JsonAdapter, MappedAdapter
+from genshin.textmap import Localizable, LocalizeAdapter
 
 
-class SkillUpgrade(JsonAdapter):
+class SkillUpgrade(LocalizeAdapter):
     pass
 
 
-class Skill(JsonAdapter):
+class SkillUpgradeConfig(MappedAdapter[SkillUpgrade]):
+    pass
+
+
+class Skill(LocalizeAdapter):
     id: Adapter("Id", int)
     icon: Adapter("SkillIcon")
     buff_icon: Adapter("BuffIcon")
@@ -38,17 +42,13 @@ class Skill(JsonAdapter):
     drag_type: Adapter("DragType", DragType)
 
 
+class SkillConfig(MappedAdapter[Skill]):
+    pass
+
+
 class SkillDepot(JsonAdapter):
     pass
 
 
-class SkillUpgradeConfig():
-    pass
-
-
-class SkillConfig():
-    pass
-
-
-class SkillDepotConfig():
+class SkillDepotConfig(MappedAdapter[SkillDepot]):
     pass
