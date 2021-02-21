@@ -33,6 +33,7 @@ class RepoData():
         self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"), encoding=encoding)))
         self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"), encoding=encoding)))
         self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path, "WeaponExcelConfigData.json"), encoding=encoding)))
+        self.skill = None
         self.skill_depot = None  # TODO: Finish the structure.
         self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"), encoding=encoding)))
         self.rewards = RewardConfig(json.load(open(path.join(self.excel_path, "RewardExcelConfigData.json"), encoding=encoding)))

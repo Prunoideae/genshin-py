@@ -10,11 +10,11 @@ Using Python 3.9.1, still much work-in-progress. The parser is developed under M
 
 `genshin-py` comes with multiple objects to make a abstract and detailed summary over the complex json structure. Mainly, it comes with three classes : `JsonAdapter`, `ConfigAdapter` and `RepoData`.
 
-# 1.1 RepoData
+## 1.1 RepoData
 
 `RepoData` is simple : a collection of all json configs parsed in the currenct structure. There's no actual need to adjust most of the content in this object, as the config files should be stable, or you can write methods to extend its functions for more analytical usage.
 
-# 1.2 ConfigAdapter
+## 1.2 ConfigAdapter
 
 `ConfigAdapter` represents an abstraction for any single config file in the repository, with a assumption of the data starts as `[object1, object2...]` as basic structure. For extending the parser to parse config files that's not yet implemented, please write a subclass that inherits the `ConfigAdapter[T]` base class, or the `MappedAdapter[T]` base class if a `id` annotation is in the class to index the objects.
 
@@ -36,7 +36,7 @@ print(list(inst.mappings.keys())) # [1,2]
 
 Please register corresponding json parsers in the `RepoData` class to keep everything simple.
 
-# 1.3 JsonAdapter
+## 1.3 JsonAdapter
 
 `JsonAdapter` represents an entry in the `List[T]` parsed by json decoder. Which is designed to parse a json object into correct python object. Marking a class inherits from `JsonAdapter` makes the class to accept a `Dict` of json object to construct the object.
 
