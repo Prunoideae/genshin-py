@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List
 
-excel = "./GenshinData/Excel/AvatarSkillExcelConfigData.json"
+excel = "./GenshinData/Excel/AvatarSkillDepotExcelConfigData.json"
 j: List[Dict] = json.load(open(excel))
 
 keys = set()

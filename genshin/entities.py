@@ -1,3 +1,4 @@
+from genshin.skills import SkillDepotConfig
 from typing import Dict, List
 from genshin.enums.attr_type import BodyType, IdentityType, QualityType, UseType, WeaponType
 from genshin.adapter import Adapter, ConfigAdapter, IdAdapter, JsonAdapter, MappedAdapter
@@ -30,6 +31,8 @@ class Avatar(LocalizeAdapter):
     body_type: Adapter("BodyType", BodyType)
     weapon_type: Adapter("WeaponType", WeaponType)
     feature_tags: IdAdapter("FeatureTagGroupID", TagGroupConfig)
+
+    skill_depot: IdAdapter("SkillDepotId", SkillDepotConfig)
 
     def __repr__(self) -> str:
         return f"<{self.name.localize()} {self.id}>"

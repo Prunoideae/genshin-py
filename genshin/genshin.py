@@ -1,4 +1,5 @@
 from __future__ import annotations
+from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig
 from typing import Dict
 from genshin.adapter import JsonAdapter, MappedAdapter
 from genshin.battlepass import BPMissionConfig, BPScheduleConfig
@@ -9,6 +10,7 @@ from genshin.items import ArtifactConfig, MaterialConfig, WeaponConfig
 from genshin.artiprops import AppendDepots, MainDepots
 from genshin.textmap import TextMap
 from genshin.entities import AvatarConfig
+from genshin.cosmetics import WindGliderConfig
 import json
 from os import path
 
@@ -32,9 +34,13 @@ class RepoData():
         # Entities
         self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"), encoding=encoding)))
         self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"), encoding=encoding)))
+        self.gliders = WindGliderConfig(json.load(open(path.join(self.excel_path, "AvatarFlycloakExcelConfigData.json"), encoding=encoding)))
         self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path, "WeaponExcelConfigData.json"), encoding=encoding)))
-        self.skill = None
-        self.skill_depot = None  # TODO: Finish the structure.
+
+        self.constellations = ConstellationConfig(json.load(open(path.join(self.excel_path, "AvatarTalentExcelConfigData.json"), encoding=encoding)))
+        self.skill = SkillConfig(json.load(open(path.join(self.excel_path, "AvatarSkillExcelConfigData.json"), encoding=encoding)))
+        self.skill_depot = SkillDepotConfig(json.load(open(path.join(self.excel_path, "AvatarSkillDepotExcelConfigData.json"),
+                                                           encoding=encoding)), skill_config=self.skill, constellation_config=self.constellations)
         self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"), encoding=encoding)))
         self.rewards = RewardConfig(json.load(open(path.join(self.excel_path, "RewardExcelConfigData.json"), encoding=encoding)))
 

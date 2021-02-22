@@ -57,7 +57,7 @@ class TrialSet(JsonAdapter):
         self.trials = [trials[x] for x in self.trials]
 
     def __repr__(self) -> str:
-        return [x for x in self.trials].__repr__()
+        return self.trials.__repr__()
 
 
 class TrialSetConfig(MappedAdapter[TrialSet]):
