@@ -3,7 +3,7 @@ from typing import Dict
 from genshin.adapter import JsonAdapter, MappedAdapter
 from genshin.battlepass import BPMissionConfig, BPScheduleConfig
 from genshin.rewards import RewardConfig
-from genshin.events import TrialAvatarConfig, TrialDataConfig, TrialSetConfig
+from genshin.events import ActivityConfig, TrialAvatarConfig, TrialDataConfig, TrialSetConfig
 from genshin.tags import TagConfig, TagGroupConfig
 from genshin.items import ArtifactConfig, MaterialConfig, WeaponConfig
 from genshin.artiprops import AppendDepots, MainDepots
@@ -45,6 +45,7 @@ class RepoData():
             json.load(open(path.join(self.excel_path, "TrialAvatarActivityDataExcelConfigData.json"), encoding=encoding)), self.trial_avatars)
         self.trialsets = TrialSetConfig(
             json.load(open(path.join(self.excel_path, "TrialAvatarActivityExcelConfigData.json"), encoding=encoding)), self.trials)
+        self.activities = ActivityConfig(json.load(open(path.join(self.excel_path, "NewActivityExcelConfigData.json"), encoding=encoding)))
 
         # BP
         self.bp_schedule = BPScheduleConfig(json.load(open(path.join(self.excel_path, "BattlePassScheduleExcelConfigData.json"), encoding=encoding)))

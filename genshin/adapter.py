@@ -11,7 +11,7 @@ T = TypeVar("T")
 TF = TypeVar("TF")
 
 
-def Adapter(source: str, adapter: T = str, transformer: None = None, fallback: Callable[[str], TF] = lambda x: None) -> Union[T, TF]:
+def Adapter(source: str, adapter: Type[T] = str, transformer: Callable[[Any], T] = None, fallback: Callable[[str], TF] = lambda x: None) -> Union[T, TF]:
     '''
     Adapter marks a field in JsonAdapter's subclass to be able to take value from key `source`, and transform it with
     `adapter` or `transformer`, and return `fallback` when key doesn't exist.

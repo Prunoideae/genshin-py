@@ -66,7 +66,15 @@ class TrialSetConfig(MappedAdapter[TrialSet]):
 
 
 class Activity(LocalizeAdapter):
-    pass
+    id: Adapter("ActivityId", int)
+    type: Adapter("ActivityType")
+    name: Adapter("NameTextMapHash", Localizable)
+    scene_tag: Adapter("ActivitySceneTag")
+    cond_group: Adapter("CondGroupId", list)
+    watcher_group: Adapter("WatcherId", list)
+
+    def __repr__(self) -> str:
+        return f"<{self.name.localize()} {self.id}>"
 
 
 class ActivityConfig(MappedAdapter[Activity]):

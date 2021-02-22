@@ -1,3 +1,4 @@
+from genshin.events import ActivityConfig
 from genshin.adapter import Adapter, IdAdapter, MappedAdapter
 from genshin.textmap import Localizable, LocalizeAdapter
 
@@ -21,7 +22,7 @@ class BattlePassMission(LocalizeAdapter):
     counter: Adapter("Progress", int)
 
     schedule: IdAdapter("ScheduleId", BPScheduleConfig)
-    activity: Adapter("ActivityId", int)
+    activity: IdAdapter("ActivityId", ActivityConfig)
 
 
 class BPMissionConfig(MappedAdapter[BattlePassMission]):
