@@ -1,6 +1,6 @@
 from __future__ import annotations
 from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig, SkillUpgradeConfig
-from typing import Dict
+from typing import Dict, List
 from genshin.adapter import JsonAdapter, MappedAdapter
 from genshin.battlepass import BPMissionConfig, BPScheduleConfig
 from genshin.rewards import RewardConfig
@@ -9,54 +9,53 @@ from genshin.tags import TagConfig, TagGroupConfig
 from genshin.items import ArtifactConfig, MaterialConfig, WeaponConfig
 from genshin.artiprops import AppendDepots, MainDepots
 from genshin.textmap import TextMap
-from genshin.entities import AvatarConfig
+from genshin.entities import AvatarCodexConfig, AvatarConfig
 from genshin.cosmetics import WindGliderConfig
 import json
 from os import path
 
 
 class RepoData():
+    def json(self, json_name) -> List[Dict]:
+        return json.load(open(path.join(self.excel_path, json_name), encoding=self.encoding))
+
     def __init__(self, base_path: str, textmap: str = None, lang: str = None, excel: str = None, encoding: str = None) -> None:
 
-        # Paths
+        # Supportives
         self.base_path = base_path
         self.textmap_path = path.join(base_path, "TextMap") if textmap is None else textmap
         self.excel_path = path.join(base_path, "Excel") if excel is None else excel
-
-        # Supportives
+        self.encoding = encoding
         self.textmap = TextMap(self.textmap_path, "EN" if lang is None else lang)
-        self.main_depot = MainDepots(json.load(open(path.join(self.excel_path, "ReliquaryMainPropExcelConfigData.json"), encoding=encoding)))
-        self.app_depot = AppendDepots(json.load(open(path.join(self.excel_path, "ReliquaryAffixExcelConfigData.json"), encoding=encoding)))
-        self.tags = TagConfig(json.load(open(path.join(self.excel_path, "FeatureTagExcelConfigData.json"), encoding=encoding)))
-        self.tag_groups = TagGroupConfig(
-            json.load(open(path.join(self.excel_path, "FeatureTagGroupExcelConfigData.json"), encoding=encoding)), self.tags)
+
+        self.main_depot = MainDepots(self.json("ReliquaryMainPropExcelConfigData.json"))
+        self.app_depot = AppendDepots(self.json("ReliquaryAffixExcelConfigData.json"))
+        self.tags = TagConfig(self.json("FeatureTagExcelConfigData.json"))
+        self.tag_groups = TagGroupConfig(self.json("FeatureTagGroupExcelConfigData.json"), self.tags)
 
         # Entities
-        self.artifacts = ArtifactConfig(json.load(open(path.join(self.excel_path, "ReliquaryExcelConfigData.json"), encoding=encoding)))
-        self.materials = MaterialConfig(json.load(open(path.join(self.excel_path, "MaterialExcelConfigData.json"), encoding=encoding)))
-        self.gliders = WindGliderConfig(json.load(open(path.join(self.excel_path, "AvatarFlycloakExcelConfigData.json"), encoding=encoding)))
-        self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path, "WeaponExcelConfigData.json"), encoding=encoding)))
+        self.artifacts = ArtifactConfig(self.json("ReliquaryExcelConfigData.json"))
+        self.materials = MaterialConfig(self.json("MaterialExcelConfigData.json"))
+        self.gliders = WindGliderConfig(self.json("AvatarFlycloakExcelConfigData.json"))
+        self.weapons = WeaponConfig(self.json("WeaponExcelConfigData.json"))
 
-        self.skill_upgrade = SkillUpgradeConfig(json.load(open(path.join(self.excel_path, "ProudSkillExcelConfigData.json"), encoding=encoding)))
-        self.constellations = ConstellationConfig(json.load(open(path.join(self.excel_path, "AvatarTalentExcelConfigData.json"), encoding=encoding)))
-        self.skill = SkillConfig(json.load(open(path.join(self.excel_path, "AvatarSkillExcelConfigData.json"), encoding=encoding)))
-        self.skill_depot = SkillDepotConfig(json.load(open(path.join(self.excel_path, "AvatarSkillDepotExcelConfigData.json"),
-                                                           encoding=encoding)), skill_config=self.skill, constellation_config=self.constellations)
-        self.avatars = AvatarConfig(json.load(open(path.join(self.excel_path, "AvatarExcelConfigData.json"), encoding=encoding)))
-        self.rewards = RewardConfig(json.load(open(path.join(self.excel_path, "RewardExcelConfigData.json"), encoding=encoding)))
+        self.skill_upgrade = SkillUpgradeConfig(self.json("ProudSkillExcelConfigData.json"))
+        self.constellations = ConstellationConfig(self.json("AvatarTalentExcelConfigData.json"))
+        self.skill = SkillConfig(self.json("AvatarSkillExcelConfigData.json"))
+        self.skill_depot = SkillDepotConfig(self.json("AvatarSkillDepotExcelConfigData.json"), self.skill, self.constellations)
+        self.avatars = AvatarConfig(self.json("AvatarExcelConfigData.json"))
+        self.avatar_codex = AvatarCodexConfig(self.json("AvatarCodexExcelConfigData.json"))
+        self.rewards = RewardConfig(self.json("RewardExcelConfigData.json"))
 
         # Trials
-        self.trial_avatars = TrialAvatarConfig(
-            json.load(open(path.join(self.excel_path, "TrialAvatarExcelConfigData.json"), encoding=encoding)), self.avatars)
-        self.trials = TrialDataConfig(
-            json.load(open(path.join(self.excel_path, "TrialAvatarActivityDataExcelConfigData.json"), encoding=encoding)), self.trial_avatars)
-        self.trialsets = TrialSetConfig(
-            json.load(open(path.join(self.excel_path, "TrialAvatarActivityExcelConfigData.json"), encoding=encoding)), self.trials)
-        self.activities = ActivityConfig(json.load(open(path.join(self.excel_path, "NewActivityExcelConfigData.json"), encoding=encoding)))
+        self.trial_avatars = TrialAvatarConfig(self.json("TrialAvatarExcelConfigData.json"), self.avatars)
+        self.trials = TrialDataConfig(self.json("TrialAvatarActivityDataExcelConfigData.json"), self.trial_avatars)
+        self.trialsets = TrialSetConfig(self.json("TrialAvatarActivityExcelConfigData.json"), self.trials)
+        self.activities = ActivityConfig(self.json("NewActivityExcelConfigData.json"))
 
         # BP
-        self.bp_schedule = BPScheduleConfig(json.load(open(path.join(self.excel_path, "BattlePassScheduleExcelConfigData.json"), encoding=encoding)))
-        self.bp_mission = BPMissionConfig(json.load(open(path.join(self.excel_path, "BattlePassMissionExcelConfigData.json"), encoding=encoding)))
+        self.bp_schedule = BPScheduleConfig(self.json("BattlePassScheduleExcelConfigData.json"))
+        self.bp_mission = BPMissionConfig(self.json("BattlePassMissionExcelConfigData.json"))
 
     def diff_id(self, previous: RepoData) -> Dict[str, Dict[int, JsonAdapter]]:
         result = {}

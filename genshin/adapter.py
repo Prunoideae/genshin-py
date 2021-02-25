@@ -59,6 +59,9 @@ class ConfigAdapter(Generic[T]):
         self.entries: List[T] = [adapter(x, *additional) for x in entries]
         self.__class__.__inst__ = self
 
+    def __iter__(self):
+        yield from self.entries
+
     def find(self, property: str, value: Any) -> List[T]:
         result = []
         for entry in self.entries:
@@ -96,8 +99,11 @@ class MappedAdapter(ConfigAdapter[T]):
         super().__init__(entries, additional)
         self.mappings = {x.id: x for x in self.entries}
 
-    def __getitem__(self, k: object):
+    def __getitem__(self, k: object) -> T:
         return self.mappings[k]
+
+    def __contains__(self, k: object) -> bool:
+        return k in self.mappings
 
 
 def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> Union[T, None]:

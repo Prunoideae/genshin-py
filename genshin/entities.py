@@ -4,6 +4,7 @@ from genshin.enums.attr_type import BodyType, IdentityType, QualityType, UseType
 from genshin.adapter import Adapter, ConfigAdapter, IdAdapter, JsonAdapter, MappedAdapter
 from genshin.tags import TagGroup, TagGroupConfig
 from genshin.textmap import Localizable, LocalizeAdapter, TextMap
+from datetime import datetime
 
 
 class Avatar(LocalizeAdapter):
@@ -39,4 +40,23 @@ class Avatar(LocalizeAdapter):
 
 
 class AvatarConfig(MappedAdapter[Avatar]):
+    pass
+
+
+class AvatarCodex(LocalizeAdapter):
+    id: Adapter("SortId", int)
+    factor: Adapter("SortFactor", int)
+
+    avatar: IdAdapter("AvatarId", AvatarConfig)
+    time: Adapter("BeginTime", datetime, lambda x: x)
+
+    def __init__(self, entries: List[Dict]) -> None:
+        super().__init__(entries)
+        date, time = self.time.split(" ")
+        date: List[int] = [int(x) for x in date.split('-')]
+        time: List[int] = [int(x) for x in time.split(':')]
+        self.time = datetime(*date, *time)
+
+
+class AvatarCodexConfig(MappedAdapter[AvatarCodex]):
     pass
