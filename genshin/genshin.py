@@ -1,5 +1,5 @@
 from __future__ import annotations
-from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig
+from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig, SkillUpgradeConfig
 from typing import Dict
 from genshin.adapter import JsonAdapter, MappedAdapter
 from genshin.battlepass import BPMissionConfig, BPScheduleConfig
@@ -37,6 +37,7 @@ class RepoData():
         self.gliders = WindGliderConfig(json.load(open(path.join(self.excel_path, "AvatarFlycloakExcelConfigData.json"), encoding=encoding)))
         self.weapons = WeaponConfig(json.load(open(path.join(self.excel_path, "WeaponExcelConfigData.json"), encoding=encoding)))
 
+        self.skill_upgrade = SkillUpgradeConfig(json.load(open(path.join(self.excel_path, "ProudSkillExcelConfigData.json"), encoding=encoding)))
         self.constellations = ConstellationConfig(json.load(open(path.join(self.excel_path, "AvatarTalentExcelConfigData.json"), encoding=encoding)))
         self.skill = SkillConfig(json.load(open(path.join(self.excel_path, "AvatarSkillExcelConfigData.json"), encoding=encoding)))
         self.skill_depot = SkillDepotConfig(json.load(open(path.join(self.excel_path, "AvatarSkillDepotExcelConfigData.json"),

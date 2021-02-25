@@ -5,9 +5,9 @@ import genshin.items as items
 
 class ItemStack():
 
-    def __init__(self, id, count: int) -> None:
-        self.__id__ = id
-        self.count = count
+    def __init__(self, Id, Count: int) -> None:
+        self.__id__ = Id
+        self.count = Count
 
     @classmethod
     def set_instance(cls, entry):

@@ -1,6 +1,7 @@
 
 from typing import Any, Callable, Dict, Generic, List, Type, TypeVar, Union
 from types import FunctionType
+
 import typing
 
 '''
@@ -51,6 +52,7 @@ class ConfigAdapter(Generic[T]):
     Marking class with ConfigAdapter makes the class able to receive a list of objects to
     construct itself, with corresponding JsonAdapter.
     '''
+    __inst__: 'ConfigAdapter[T]'
 
     def __init__(self, entries: List[Dict], additional: List = []) -> None:
         adapter = typing.get_args(self.__orig_bases__[0])[0]
@@ -86,6 +88,10 @@ class ConfigAdapter(Generic[T]):
 
 
 class MappedAdapter(ConfigAdapter[T]):
+    '''
+    '''
+    __inst__: 'MappedAdapter[T]'
+
     def __init__(self, entries: List[Dict], additional: List = []) -> None:
         super().__init__(entries, additional)
         self.mappings = {x.id: x for x in self.entries}

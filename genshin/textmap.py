@@ -6,6 +6,8 @@ import json
 
 
 class TextMap():
+    __inst__: 'TextMap'
+
     def __init__(self, textmap: str, name: str) -> None:
         self.__path__ = path.join(textmap, f"Text{name}.json")
         self.__maps__ = json.load(open(self.__path__))
@@ -22,6 +24,12 @@ class TextMap():
 
 
 class Localizable():
+    '''
+    A localizable string, may varies from textmap.
+
+    Uses the TextMapHash as translation key.
+    '''
+
     def __init__(self, translation_key: Union[str, int], textmap: TextMap = None) -> None:
         if textmap is not None:
             self.__textmap__ = textmap
