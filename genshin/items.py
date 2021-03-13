@@ -10,50 +10,50 @@ from genshin.utils import ItemStack, WeightedItemStack
 
 
 class MaterialEntry(LocalizeAdapter):
-    id: Adapter("Id", int)
-    rank: Adapter("RankLevel", int)
-    stacksize: Adapter("StackLimit", int)
-    max_use: Adapter("MaxUseCount", int)
-    use_level: Adapter("UseLevel", int)
-    weight: Adapter("Weight", int)
-    cd: Adapter("CdTime", int)
-    __rank: Adapter("Rank", int)
-    global_limit: Adapter("GlobalItemLimit", int)
+    id = Adapter("Id", int)
+    rank = Adapter("RankLevel", int)
+    stacksize = Adapter("StackLimit", int)
+    max_use = Adapter("MaxUseCount", int)
+    use_level = Adapter("UseLevel", int)
+    weight = Adapter("Weight", int)
+    cd = Adapter("CdTime", int)
+    __rank = Adapter("Rank", int)
+    global_limit = Adapter("GlobalItemLimit", int)
 
-    hidden: Adapter("IsHidden", bool)
-    is_split_drop: Adapter("IsSplitDrop", bool)
-    use_on_gain: Adapter("UseOnGain", bool)
-    close_bag_after_use: Adapter("CloseBagAfterUsed", bool)
-    play_gain_effect: Adapter("PlayGainEffect", bool)
-    no_first_get_hin: Adapter("NoFirstGetHint", bool)
+    hidden = Adapter("IsHidden", bool)
+    is_split_drop = Adapter("IsSplitDrop", bool)
+    use_on_gain = Adapter("UseOnGain", bool)
+    close_bag_after_use = Adapter("CloseBagAfterUsed", bool)
+    play_gain_effect = Adapter("PlayGainEffect", bool)
+    no_first_get_hin = Adapter("NoFirstGetHint", bool)
 
-    target: Adapter("UseTarget", UseTarget)
-    item_type: Adapter("ItemType", ItemType)
-    material_type: Adapter("MaterialType", MaterialType)
-    icon: Adapter("Icon")
-    gadget_id: Adapter("GadgetId", int)
+    target = Adapter("UseTarget", UseTarget)
+    item_type = Adapter("ItemType", ItemType)
+    material_type = Adapter("MaterialType", MaterialType)
+    icon = Adapter("Icon")
+    gadget_id = Adapter("GadgetId", int)
 
-    food_quality: Adapter("FoodQuality", FoodQuality)
-    hunger_value: Adapter("SatiationParams", int, transformer=lambda x: x[1] if x else 0)
+    food_quality = Adapter("FoodQuality", FoodQuality)
+    hunger_value = Adapter("SatiationParams", int, transformer=lambda x: x[1] if x else 0)
 
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
-    type_text: Adapter("TypeDescTextMapHash", Localizable)
-    interaction_text: Adapter("InteractionTitleTextMapHash", Localizable)
-    special_text: Adapter("SpecialDescTextMapHash", Localizable)
-    effect_text: Adapter("EffectDescTextMapHash", Localizable)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
+    type_text = Adapter("TypeDescTextMapHash", Localizable)
+    interaction_text = Adapter("InteractionTitleTextMapHash", Localizable)
+    special_text = Adapter("SpecialDescTextMapHash", Localizable)
+    effect_text = Adapter("EffectDescTextMapHash", Localizable)
 
-    effect_icon: Adapter("EffectIcon")
-    effect_name: Adapter("EffectName")
-    effect_id: Adapter("EffectGadgetID")
+    effect_icon = Adapter("EffectIcon")
+    effect_name = Adapter("EffectName")
+    effect_id = Adapter("EffectGadgetID")
 
-    can_destroy: Adapter("DestroyRule", bool, lambda x: x == "DESTROY_RETURN_MATERIAL", lambda x: False)
-    recover_list: Union[List, None]
+    can_destroy = Adapter("DestroyRule", bool, lambda x: x == "DESTROY_RETURN_MATERIAL", lambda x: False)
+    recover_list = Union[List, None]
 
-    set_id: Adapter("SetID", int)
+    set_id = Adapter("SetID", int)
 
-    item_use: Adapter("ItemUse", list, lambda x: x)
-    pic_path: Adapter("PicPath", list, lambda x: x)
+    item_use = Adapter("ItemUse", list, lambda x: x)
+    pic_path = Adapter("PicPath", list, lambda x: x)
 
     def __init__(self, entry: Dict) -> None:
         super().__init__(entry)
@@ -73,28 +73,28 @@ class MaterialConfig(MappedAdapter[MaterialEntry]):
 
 
 class ArtifactEntry(LocalizeAdapter):
-    id: Adapter("Id", int)
-    rank: Adapter("RankLevel", int)
-    weight: Adapter("Weight", int)
-    __rank: Adapter("Rank", int)
-    set_id: Adapter("SetID", int)
-    item_type: Adapter("ItemType", ItemType)
-    icon: Adapter("Icon")
-    gadget_id: Adapter("GadgetId", int)
-    max_level: Adapter("MaxLevel", int)
-    base_exp: Adapter("BaseConvExp", int)
+    id = Adapter("Id", int)
+    rank = Adapter("RankLevel", int)
+    weight = Adapter("Weight", int)
+    __rank = Adapter("Rank", int)
+    set_id = Adapter("SetID", int)
+    item_type = Adapter("ItemType", ItemType)
+    icon = Adapter("Icon")
+    gadget_id = Adapter("GadgetId", int)
+    max_level = Adapter("MaxLevel", int)
+    base_exp = Adapter("BaseConvExp", int)
 
-    main_depot: IdAdapter("MainPropDepotId", MainDepots)
-    append_depot: Adapter("AppendPropDepotId", List[AppendDepot], lambda x: x)
+    main_depot = IdAdapter("MainPropDepotId", MainDepots)
+    append_depot = Adapter("AppendPropDepotId", List[AppendDepot], lambda x: x)
 
-    can_drop: Adapter("Dropable", bool)
-    equip_type: Adapter("EquipType", EquipPart)
+    can_drop = Adapter("Dropable", bool)
+    equip_type = Adapter("EquipType", EquipPart)
 
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
 
-    can_destroy: Adapter("DestroyRule", bool, lambda x: x == "DESTROY_RETURN_MATERIAL", lambda x: False)
-    recover_list: Union[List[ItemStack], None]
+    can_destroy = Adapter("DestroyRule", bool, lambda x: x == "DESTROY_RETURN_MATERIAL", lambda x: False)
+    recover_list = Union[List[ItemStack], None]
 
     def __init__(self, entry: Dict) -> None:
         super().__init__(entry)
@@ -114,35 +114,35 @@ class ArtifactConfig(MappedAdapter[ArtifactEntry]):
 
 
 class WeaponEntry(LocalizeAdapter):
-    id: Adapter("Id", int)
-    level: Adapter("RankLevel", int)
-    exp: Adapter("WeaponBaseExp", int)
-    skills: Adapter("SkillAffix", List[int], lambda x: [y for y in x if y != 0])
-    item_type: Adapter("ItemType", ItemType)
-    weight: Adapter("Weight", int)
-    __rank: Adapter("Rank", int)
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
+    id = Adapter("Id", int)
+    level = Adapter("RankLevel", int)
+    exp = Adapter("WeaponBaseExp", int)
+    skills = Adapter("SkillAffix", List[int], lambda x: [y for y in x if y != 0])
+    item_type = Adapter("ItemType", ItemType)
+    weight = Adapter("Weight", int)
+    __rank = Adapter("Rank", int)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
 
-    gadget_id: Adapter("GadgetId", int)
+    gadget_id = Adapter("GadgetId", int)
 
-    __weapon_pros: Adapter("WeaponProp", List[Dict], lambda x: x)
+    __weapon_pros = Adapter("WeaponProp", List[Dict], lambda x: x)
     base_atk: float
     base_curve: str
     substat: Union[ArtiAttrType, None]
     substat_base: float
     substat_curve: str
 
-    awaken_texture: Adapter("AwakenTexture")
-    awaken_icon: Adapter("AwakenIcon")
-    icon: Adapter("Icon")
+    awaken_texture = Adapter("AwakenTexture")
+    awaken_icon = Adapter("AwakenIcon")
+    icon = Adapter("Icon")
 
-    unrotate: Adapter("UnRotate", bool)
+    unrotate = Adapter("UnRotate", bool)
 
-    promote_id: Adapter("WeaponPromoteId", int)
-    refine_costs: Adapter("AwakenCosts", List[int], lambda x: x)
+    promote_id = Adapter("WeaponPromoteId", int)
+    refine_costs = Adapter("AwakenCosts", List[int], lambda x: x)
 
-    story_id: Adapter("StoryId", int)
+    story_id = Adapter("StoryId", int)
 
     def __init__(self, entry: Dict) -> None:
         super().__init__(entry)

@@ -1,3 +1,5 @@
+from typing import Type
+from genshin.adapter import T
 from genshin.enums.target import EquipPart
 from genshin.enums.item_type import MaterialType
 from genshin.genshin import RepoData

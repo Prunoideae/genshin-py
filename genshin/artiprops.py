@@ -4,24 +4,24 @@ from .adapter import Adapter, JsonAdapter, MappedAdapter
 
 
 class MainDepot(JsonAdapter):
-    id: Adapter("Id", int)
-    depot_id: Adapter("PropDepotId", int)
-    prop_type: Adapter("PropType", ArtiAttrType)
-    affix: Adapter("AffixName")
-    weight: Adapter("Weight", int)
+    id = Adapter("Id", int)
+    depot_id = Adapter("PropDepotId", int)
+    prop_type = Adapter("PropType", ArtiAttrType)
+    affix = Adapter("AffixName")
+    weight = Adapter("Weight", int)
 
     def __repr__(self) -> str:
         return f"<{self.prop_type.name} {self.weight}>"
 
 
 class AppendDepot(JsonAdapter):
-    id: Adapter("Id", int)
-    depot_id: Adapter("DepotId", int)
-    group_id: Adapter("GroupId", int)
-    prop_type: Adapter("PropType", ArtiAttrType)
-    prop_value: Adapter("PropValue", float)
-    weight: Adapter("Weight", int)
-    upgrade_weight: Adapter("UpgradeWeight", int)
+    id = Adapter("Id", int)
+    depot_id = Adapter("DepotId", int)
+    group_id = Adapter("GroupId", int)
+    prop_type = Adapter("PropType", ArtiAttrType)
+    prop_value = Adapter("PropValue", float)
+    weight = Adapter("Weight", int)
+    upgrade_weight = Adapter("UpgradeWeight", int)
 
     def __repr__(self) -> str:
         return f"<{self.prop_type.name} {self.weight} {self.prop_value:.2f}>"

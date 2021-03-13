@@ -5,8 +5,8 @@ from genshin.items import ItemStack
 
 
 class Reward(JsonAdapter):
-    id: Adapter("RewardId", int)
-    items: Adapter("RewardItemList", List[ItemStack], lambda x: [y for y in x if y])
+    id = Adapter("RewardId", int)
+    items = Adapter("RewardItemList", List[ItemStack], lambda x: [y for y in x if y])
 
     def __init__(self, entry: Dict) -> None:
         super().__init__(entry)

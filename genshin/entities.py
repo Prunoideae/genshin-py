@@ -8,32 +8,32 @@ from datetime import datetime
 
 
 class Avatar(LocalizeAdapter):
-    id: Adapter("Id", int)
-    ranged: Adapter("IsRangeAttack", bool)
+    id = Adapter("Id", int)
+    ranged = Adapter("IsRangeAttack", bool)
 
-    quality: Adapter("QualityType", QualityType)
-    use_type: Adapter("UseType", UseType)
-    identity_type: Adapter("IdentityType", IdentityType)
+    quality = Adapter("QualityType", QualityType)
+    use_type = Adapter("UseType", UseType)
+    identity_type = Adapter("IdentityType", IdentityType)
 
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
-    info: Adapter("InfoDescTextMapHash", Localizable)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
+    info = Adapter("InfoDescTextMapHash", Localizable)
 
-    initial_weapon: Adapter("InitialWeapon", int)
+    initial_weapon = Adapter("InitialWeapon", int)
 
-    hp_base: Adapter("HpBase", float)
-    atk_base: Adapter("AttackBase", float)
-    def_base: Adapter("DefenseBase", float)
-    crit: Adapter("Critical", float)
-    crit_dmg: Adapter("CriticalHurt", float)
-    energy_recharge: Adapter("ChargeEfficiency", float)
-    stamina_recover: Adapter("StaminaRecoverSpeed", float)
+    hp_base = Adapter("HpBase", float)
+    atk_base = Adapter("AttackBase", float)
+    def_base = Adapter("DefenseBase", float)
+    crit = Adapter("Critical", float)
+    crit_dmg = Adapter("CriticalHurt", float)
+    energy_recharge = Adapter("ChargeEfficiency", float)
+    stamina_recover = Adapter("StaminaRecoverSpeed", float)
 
-    body_type: Adapter("BodyType", BodyType)
-    weapon_type: Adapter("WeaponType", WeaponType)
-    feature_tags: IdAdapter("FeatureTagGroupID", TagGroupConfig)
+    body_type = Adapter("BodyType", BodyType)
+    weapon_type = Adapter("WeaponType", WeaponType)
+    feature_tags = IdAdapter("FeatureTagGroupID", TagGroupConfig)
 
-    skill_depot: IdAdapter("SkillDepotId", SkillDepotConfig)
+    skill_depot = IdAdapter("SkillDepotId", SkillDepotConfig)
 
     def __repr__(self) -> str:
         return f"<{self.name.localize()} {self.id}>"
@@ -44,11 +44,11 @@ class AvatarConfig(MappedAdapter[Avatar]):
 
 
 class AvatarCodex(LocalizeAdapter):
-    id: Adapter("SortId", int)
-    factor: Adapter("SortFactor", int)
+    id = Adapter("SortId", int)
+    factor = Adapter("SortFactor", int)
 
-    avatar: IdAdapter("AvatarId", AvatarConfig)
-    time: Adapter("BeginTime", datetime, lambda x: x)
+    avatar = IdAdapter("AvatarId", AvatarConfig)
+    time = Adapter("BeginTime", datetime, lambda x: x)
 
     def __init__(self, entries: List[Dict]) -> None:
         super().__init__(entries)

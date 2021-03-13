@@ -42,7 +42,7 @@ class JsonAdapter():
     '''
 
     def __init__(self, entry: Dict) -> None:
-        for k, v in self.__annotations__.items():
+        for k, v in self.__class__.__dict__.items():
             if isinstance(v, AdapterInst):
                 self.__dict__[k] = v.transform(entry)
 

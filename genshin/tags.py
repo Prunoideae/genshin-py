@@ -3,9 +3,9 @@ from genshin.adapter import Adapter, ConfigAdapter, JsonAdapter, MappedAdapter
 
 
 class Tag(JsonAdapter):
-    id: Adapter("TagID", int)
-    name: Adapter("TagName")
-    desc: Adapter("TagDesp")
+    id = Adapter("TagID", int)
+    name = Adapter("TagName")
+    desc = Adapter("TagDesp")
 
     def __repr__(self) -> str:
         return f"<{self.id} {self.name}>"
@@ -16,8 +16,8 @@ class TagConfig(MappedAdapter[Tag]):
 
 
 class TagGroup(JsonAdapter):
-    id: Adapter("GroupID", int)
-    tags: Adapter("TagIDs", List[Tag], lambda x: [y for y in x if y != 0])
+    id = Adapter("GroupID", int)
+    tags = Adapter("TagIDs", List[Tag], lambda x: [y for y in x if y != 0])
 
     def __init__(self, entry: Dict, tags: TagConfig) -> None:
         super().__init__(entry)

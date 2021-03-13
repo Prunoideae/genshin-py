@@ -7,24 +7,24 @@ from genshin.textmap import Localizable, LocalizeAdapter, TextMap
 
 
 class SkillUpgrade(LocalizeAdapter):
-    id: Adapter("ProudSkillId", int)
-    group: Adapter("ProudSkillGroupId", int)
-    level: Adapter("Level", int)
-    skill_type: Adapter("ProudSkillType", int)
+    id = Adapter("ProudSkillId", int)
+    group = Adapter("ProudSkillGroupId", int)
+    level = Adapter("Level", int)
+    skill_type = Adapter("ProudSkillType", int)
 
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
-    unlock: Adapter("UnlockDescTextMapHash", Localizable)
-    param_desc: Adapter("ParamDescList", List[Localizable], lambda x: x)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
+    unlock = Adapter("UnlockDescTextMapHash", Localizable)
+    param_desc = Adapter("ParamDescList", List[Localizable], lambda x: x)
 
-    icon: Adapter("Icon")
+    icon = Adapter("Icon")
 
-    mora: Adapter("CoinCost", int)
-    items: Adapter("CostItems", List[ItemStack], lambda x: [ItemStack(**y) for y in x if "Id" in y and "Count" in y])
-    filter: Adapter("FilterConds", list)
-    ascension: Adapter("BreakLevel", int)
+    mora = Adapter("CoinCost", int)
+    items = Adapter("CostItems", List[ItemStack], lambda x: [ItemStack(**y) for y in x if "Id" in y and "Count" in y])
+    filter = Adapter("FilterConds", list)
+    ascension = Adapter("BreakLevel", int)
 
-    param_list: Adapter("ParamList", list)
+    param_list = Adapter("ParamList", list)
 
     def __init__(self, entries: List[Dict]) -> None:
         super().__init__(entries)
@@ -48,10 +48,10 @@ class SkillUpgradeConfig(MappedAdapter[SkillUpgrade]):
 
 
 class Constellation(LocalizeAdapter):
-    id: Adapter("TalentId", int)
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
-    prev: Adapter("PrevTalent", int)
+    id = Adapter("TalentId", int)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
+    prev = Adapter("PrevTalent", int)
 
 
 class ConstellationConfig(MappedAdapter[Constellation]):
@@ -59,35 +59,35 @@ class ConstellationConfig(MappedAdapter[Constellation]):
 
 
 class Skill(LocalizeAdapter):
-    id: Adapter("Id", int)
-    icon: Adapter("SkillIcon")
-    buff_icon: Adapter("BuffIcon")
-    ability_name: Adapter("AbilityName")
+    id = Adapter("Id", int)
+    icon = Adapter("SkillIcon")
+    buff_icon = Adapter("BuffIcon")
+    ability_name = Adapter("AbilityName")
 
-    cd: Adapter("CdTime", float)
-    charge: Adapter("MaxChargeNum", int)
-    stamina: Adapter("CostStamina", float)
-    min_energy: Adapter("EnergyMin", float)
-    cd_slot: Adapter("CdSlot", int)
+    cd = Adapter("CdTime", float)
+    charge = Adapter("MaxChargeNum", int)
+    stamina = Adapter("CostStamina", float)
+    min_energy = Adapter("EnergyMin", float)
+    cd_slot = Adapter("CdSlot", int)
 
-    element_type: Adapter("CostElemType", ElementType)
-    energy_required: Adapter("CostElemVal", float)
+    element_type = Adapter("CostElemType", ElementType)
+    energy_required = Adapter("CostElemVal", float)
 
-    ranged: Adapter("IsRanged", bool)
-    camera_lock: Adapter("IsAttackCameraLock", bool)
-    default_locked: Adapter("DefaultLocked", bool)
-    no_cd_reduce: Adapter("IgnoreCDMinusRatio", bool)
-    show_icon_arrow: Adapter("ShowIconArrow", bool)
-    no_stagger_after_hit: Adapter("ForceCanDoSkill", bool)
-    survive_lethal: Adapter("NeedStore", bool)
+    ranged = Adapter("IsRanged", bool)
+    camera_lock = Adapter("IsAttackCameraLock", bool)
+    default_locked = Adapter("DefaultLocked", bool)
+    no_cd_reduce = Adapter("IgnoreCDMinusRatio", bool)
+    show_icon_arrow = Adapter("ShowIconArrow", bool)
+    no_stagger_after_hit = Adapter("ForceCanDoSkill", bool)
+    survive_lethal = Adapter("NeedStore", bool)
 
-    upgrade_group: Adapter("ProudSkillGroupId", List[SkillUpgrade], lambda x: SkillUpgradeConfig.__inst__.group_mappings[x])
+    upgrade_group = Adapter("ProudSkillGroupId", List[SkillUpgrade], lambda x: SkillUpgradeConfig.__inst__.group_mappings[x])
 
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
 
-    lock_shape: Adapter("LockShape", LockShape)
-    drag_type: Adapter("DragType", DragType)
+    lock_shape = Adapter("LockShape", LockShape)
+    drag_type = Adapter("DragType", DragType)
 
 
 class SkillConfig(MappedAdapter[Skill]):
@@ -95,15 +95,15 @@ class SkillConfig(MappedAdapter[Skill]):
 
 
 class SkillDepot(JsonAdapter):
-    id: Adapter("Id", int)
+    id = Adapter("Id", int)
 
-    burst: IdAdapter("EnergySkill", SkillConfig)
-    skills: Adapter("Skills", List[Skill], lambda x: [y for y in x if y != 0])
-    subskills: Adapter("SubSkills", List[Skill], lambda x: [y for y in x if y != 0])
-    normal: IdAdapter("AttackModeSkill", SkillConfig)
-    constellations: Adapter("Talents", List[Constellation], lambda x: [y for y in x if y != 0])
+    burst = IdAdapter("EnergySkill", SkillConfig)
+    skills = Adapter("Skills", List[Skill], lambda x: [y for y in x if y != 0])
+    subskills = Adapter("SubSkills", List[Skill], lambda x: [y for y in x if y != 0])
+    normal = IdAdapter("AttackModeSkill", SkillConfig)
+    constellations = Adapter("Talents", List[Constellation], lambda x: [y for y in x if y != 0])
     # TODO : fill the upgrade
-    upgrades: Adapter("InherentProudSkillOpens", List, lambda x: [y["ProudSkillGroupId"] for y in x if "ProudSkillGroupId" in y])
+    upgrades = Adapter("InherentProudSkillOpens", List, lambda x: [y["ProudSkillGroupId"] for y in x if "ProudSkillGroupId" in y])
 
     def __init__(self, entry: Dict, skill_config: SkillConfig, constellation_config: ConstellationConfig) -> None:
         super().__init__(entry)

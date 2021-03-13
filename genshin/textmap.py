@@ -69,6 +69,6 @@ class LocalizeAdapter(JsonAdapter):
 
     def __init__(self, entries: List[Dict]) -> None:
         super().__init__(entries)
-        for k, v in self.__annotations__.items():
+        for k, v in self.__class__.__dict__.items():
             if isinstance(v, AdapterInst) and v.adapter == Localizable:
                 self.__dict__[k].set(TextMap.__inst__)

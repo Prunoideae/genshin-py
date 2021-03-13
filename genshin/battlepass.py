@@ -4,10 +4,10 @@ from genshin.textmap import Localizable, LocalizeAdapter
 
 
 class BattlePassSchedule(LocalizeAdapter):
-    id: Adapter("Id", int)
-    title: Adapter("TitleNameTextMapHash", Localizable)
-    begin: Adapter("BeginDateStr")
-    end: Adapter("EndDateStr")
+    id = Adapter("Id", int)
+    title = Adapter("TitleNameTextMapHash", Localizable)
+    begin = Adapter("BeginDateStr")
+    end = Adapter("EndDateStr")
 
 
 class BPScheduleConfig(MappedAdapter[BattlePassSchedule]):
@@ -15,14 +15,14 @@ class BPScheduleConfig(MappedAdapter[BattlePassSchedule]):
 
 
 class BattlePassMission(LocalizeAdapter):
-    id: Adapter("Id", int)
-    exp: Adapter("AddPoint", int)
-    desc: Adapter("DescTextMapHash", Localizable)
-    trigger: Adapter("TriggerConfig", dict)
-    counter: Adapter("Progress", int)
+    id = Adapter("Id", int)
+    exp = Adapter("AddPoint", int)
+    desc = Adapter("DescTextMapHash", Localizable)
+    trigger = Adapter("TriggerConfig", dict)
+    counter = Adapter("Progress", int)
 
-    schedule: IdAdapter("ScheduleId", BPScheduleConfig)
-    activity: IdAdapter("ActivityId", ActivityConfig)
+    schedule = IdAdapter("ScheduleId", BPScheduleConfig)
+    activity = IdAdapter("ActivityId", ActivityConfig)
 
 
 class BPMissionConfig(MappedAdapter[BattlePassMission]):

@@ -5,11 +5,11 @@ from genshin.items import MaterialConfig
 
 
 class WindGlider(LocalizeAdapter):
-    id: Adapter("FlycloakId", int)
-    name: Adapter("NameTextMapHash", Localizable)
-    desc: Adapter("DescTextMapHash", Localizable)
-    json: Adapter("JsonName")
-    item: IdAdapter("MaterialId", MaterialConfig)
+    id = Adapter("FlycloakId", int)
+    name = Adapter("NameTextMapHash", Localizable)
+    desc = Adapter("DescTextMapHash", Localizable)
+    json = Adapter("JsonName")
+    item = IdAdapter("MaterialId", MaterialConfig)
 
 
 class WindGliderConfig(MappedAdapter[WindGlider]):
