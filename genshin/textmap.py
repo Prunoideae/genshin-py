@@ -10,7 +10,7 @@ class TextMap():
 
     def __init__(self, textmap: str, name: str) -> None:
         self.__path__ = path.join(textmap, f"Text{name}.json")
-        self.__maps__ = json.load(open(self.__path__))
+        self.__maps__: Dict[str, str] = json.load(open(self.__path__))
         self.__class__.__inst__ = self
 
     def reload(self, name: str, textmap: str = None):
@@ -21,6 +21,9 @@ class TextMap():
         if type(k) is not str:
             k = str(k)
         return self.__maps__[k] if k in self.__maps__ else None
+
+    def diff(self, old: 'TextMap') -> Dict[str, str]:
+        return {k: v for k, v in self.__maps__.items() if k not in old or v != old[k]}
 
 
 class Localizable():

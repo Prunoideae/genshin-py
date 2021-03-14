@@ -1,3 +1,4 @@
+from genshin.items import WeaponConfig, WeaponEntry
 from genshin.textmap import Localizable, LocalizeAdapter, TextMap
 from typing import Dict, List
 from genshin.adapter import Adapter, IdAdapter, JsonAdapter, ConfigAdapter, MappedAdapter
@@ -10,19 +11,23 @@ class TrialAvatar(JsonAdapter):
     __weapon_param_list = Adapter("TrialWeaponParamList", list)
     avatar = Avatar
     level = int
+    weapon = WeaponEntry
+    weapon_level = int
 
-    def __init__(self, entry: Dict, avatar_config: AvatarConfig) -> None:
+    def __init__(self, entry: Dict, avatar_config: AvatarConfig, weapon_config: WeaponConfig) -> None:
         super().__init__(entry)
         self.avatar = avatar_config[self.__avatar_param_list[0]]
         self.level = self.__avatar_param_list[1]
+        self.weapon = weapon_config[self.__weapon_param_list[0]]
+        self.weapon_level = self.__weapon_param_list[1]
 
     def __repr__(self) -> str:
-        return f"<{self.avatar.name.localize()} {self.level}>"
+        return f"<{self.avatar.name.localize()} {self.level} | {self.weapon.name.localize()} {self.weapon_level}>"
 
 
 class TrialAvatarConfig(MappedAdapter[TrialAvatar]):
-    def __init__(self, entries: List[Dict], avatars: AvatarConfig) -> None:
-        super().__init__(entries, additional=[avatars])
+    def __init__(self, entries: List[Dict], avatars: AvatarConfig, weapons: WeaponConfig) -> None:
+        super().__init__(entries, additional=[avatars, weapons])
 
 
 class TrialData(LocalizeAdapter):

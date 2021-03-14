@@ -12,6 +12,13 @@ class Reward(JsonAdapter):
         super().__init__(entry)
         self.items = [ItemStack(x["ItemId"], x["ItemCount"]) for x in self.items]
 
+    def __eq__(self, o: 'Reward') -> bool:
+        a = self.items.copy()
+        a.sort(key=lambda x: x.__id__)
+        b = o.items.copy()
+        b.sort(key=lambda x: x.__id__)
+        return all(x == y for x, y in zip(a, b))
+
 
 class RewardConfig(MappedAdapter[Reward]):
     def __init__(self, entries: List[Dict]) -> None:

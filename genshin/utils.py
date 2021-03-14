@@ -25,6 +25,9 @@ class ItemStack():
     def __repr__(self) -> str:
         return f"<{self.item.name.localize()} {self.count}>"
 
+    def __eq__(self, o: 'ItemStack') -> bool:
+        return self.__id__ == o.__id__ and self.count == o.count
+
 
 class WeightedItemStack(ItemStack):
     def __init__(self, id, count: int, weight: int) -> None:

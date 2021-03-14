@@ -41,16 +41,28 @@ class JsonAdapter():
     and construct itself.
     '''
 
+    __keys__: List[str]
+
     def __init__(self, entry: Dict) -> None:
+        self.__keys__ = []
         for k, v in self.__class__.__dict__.items():
             if isinstance(v, AdapterInst):
                 self.__dict__[k] = v.transform(entry)
+                self.__keys__.append(k)
+        self.__keys__.sort()
+
+    def __eq__(self, o: 'JsonAdapter') -> bool:
+        return all(self.__dict__[x] == o.__dict__[y] for x, y in zip(self.__keys__, o.__keys__))
 
 
 class ConfigAdapter(Generic[T]):
     '''
     Marking class with ConfigAdapter makes the class able to receive a list of objects to
     construct itself, with corresponding JsonAdapter.
+
+    Note that this will also register `self` to `sele.__class__.__inst__`, as long as all the registry
+    and parsing are done per `RepoData`, this should make no conflict of different versions of
+    `RepoData`, since all data are stored in corresponding objects.
     '''
     __inst__: 'ConfigAdapter[T]'
 
@@ -92,6 +104,12 @@ class ConfigAdapter(Generic[T]):
 
 class MappedAdapter(ConfigAdapter[T]):
     '''
+    Mapped adapter of `ConfigAdapter[T]`.
+
+    Automatically generates a id mapping by `id` field. This follows a
+    duck-typing manner.
+
+    It also provides set of functions like __getitem__ or __contains__.
     '''
     __inst__: 'MappedAdapter[T]'
 
@@ -104,6 +122,9 @@ class MappedAdapter(ConfigAdapter[T]):
 
     def __contains__(self, k: object) -> bool:
         return k in self.mappings
+
+    def diff(self, old: 'MappedAdapter[T]') -> Dict[Any, T]:
+        return {k: v for k, v in self.mappings.items() if k not in old or v != old[k]}
 
 
 def IdAdapter(source: str, config: Type[MappedAdapter[T]]) -> Union[T, None]:

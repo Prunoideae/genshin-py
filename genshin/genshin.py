@@ -16,6 +16,13 @@ from os import path
 
 
 class RepoData():
+    """
+    A object representing DimBreath's GenshinData.
+    
+    Calls and fields should be stable overtime, and any changes
+    in original json structure will be reflected as a change in 
+    parsing, not the fields, unless there're critical changes.
+    """
     def json(self, json_name) -> List[Dict]:
         return json.load(open(path.join(self.excel_path, json_name), encoding=self.encoding))
 
@@ -48,7 +55,7 @@ class RepoData():
         self.rewards = RewardConfig(self.json("RewardExcelConfigData.json"))
 
         # Trials
-        self.trial_avatars = TrialAvatarConfig(self.json("TrialAvatarExcelConfigData.json"), self.avatars)
+        self.trial_avatars = TrialAvatarConfig(self.json("TrialAvatarExcelConfigData.json"), self.avatars, self.weapons)
         self.trials = TrialDataConfig(self.json("TrialAvatarActivityDataExcelConfigData.json"), self.trial_avatars)
         self.trialsets = TrialSetConfig(self.json("TrialAvatarActivityExcelConfigData.json"), self.trials)
         self.activities = ActivityConfig(self.json("NewActivityExcelConfigData.json"))
