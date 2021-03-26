@@ -24,6 +24,9 @@ class BattlePassMission(LocalizeAdapter):
     schedule = IdAdapter("ScheduleId", BPScheduleConfig)
     activity = IdAdapter("ActivityId", ActivityConfig)
 
+    def __repr__(self) -> str:
+        return f"<{self.desc.localize()} {self.exp}>"
+
 
 class BPMissionConfig(MappedAdapter[BattlePassMission]):
     pass

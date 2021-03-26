@@ -1,4 +1,6 @@
 
+from genshin.achievements import Achievement
+from genshin.enums.displays import CGType
 import json
 from typing import Dict, List
 from genshin.rewards import Reward, RewardConfig
@@ -10,5 +12,4 @@ from genshin.genshin import RepoData
 
 
 repo1_4 = RepoData("./GenshinData", lang="EN", encoding="utf8")
-
-print(repo1_4)
+print(repo1_4.materials[104011])

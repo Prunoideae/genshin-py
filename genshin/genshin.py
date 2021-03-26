@@ -1,4 +1,6 @@
 from __future__ import annotations
+from genshin.achievements import AchievementConfig
+from genshin.hangout import HangoutCGConfig
 from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig, SkillUpgradeConfig
 from typing import Dict, List, Type
 from genshin.adapter import ConfigAdapter, JsonAdapter, MappedAdapter, T
@@ -60,6 +62,12 @@ class RepoData():
         self.trials = TrialDataConfig(self.json("TrialAvatarActivityDataExcelConfigData.json"), self.trial_avatars)
         self.trialsets = TrialSetConfig(self.json("TrialAvatarActivityExcelConfigData.json"), self.trials)
         self.activities = ActivityConfig(self.json("NewActivityExcelConfigData.json"))
+
+        # Achievements
+        self.achievements = AchievementConfig(self.json("AchievementExcelConfigData.json"))
+
+        # Hangouts
+        self.hangout_cg = HangoutCGConfig(self.json("CoopCGExcelConfigData.json"))
 
         # BP
         self.bp_schedule = BPScheduleConfig(self.json("BattlePassScheduleExcelConfigData.json"))

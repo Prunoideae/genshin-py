@@ -15,3 +15,8 @@ class LockShape(Enum):
 class DragType(Enum):
     ROTATE_CAMERA = "DRAG_ROTATE_CAMERA"
     ROTATE_CHARACTER = "DRAG_ROTATE_CHARACTER"
+
+
+class CGType(Enum):
+    MALE = "CG_MALE"
+    FEMALE = "CG_FEMALE"
