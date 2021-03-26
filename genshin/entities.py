@@ -18,7 +18,7 @@ class Avatar(LocalizeAdapter):
     name = Adapter("NameTextMapHash", Localizable)
     desc = Adapter("DescTextMapHash", Localizable)
     info = Adapter("InfoDescTextMapHash", Localizable)
-
+    image_name = Adapter("ImageName")
     initial_weapon = Adapter("InitialWeapon", int)
 
     hp_base = Adapter("HpBase", float)

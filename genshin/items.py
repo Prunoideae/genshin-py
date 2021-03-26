@@ -157,6 +157,9 @@ class WeaponEntry(LocalizeAdapter):
             self.substat_base = 0
             self.substat_curve = ""
 
+    def __repr__(self) -> str:
+        return self.name.__repr__()
+
 
 class WeaponConfig(MappedAdapter[WeaponEntry]):
     def __init__(self, entries: List[Dict]) -> None:

@@ -19,6 +19,8 @@ class Reward(JsonAdapter):
         b.sort(key=lambda x: x.__id__)
         return all(x == y for x, y in zip(a, b))
 
+    def __repr__(self) -> str:
+        return self.items.__repr__()
 
 class RewardConfig(MappedAdapter[Reward]):
     def __init__(self, entries: List[Dict]) -> None:

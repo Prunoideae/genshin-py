@@ -23,7 +23,7 @@ class TextMap():
         return self.__maps__[k] if k in self.__maps__ else None
 
     def diff(self, old: 'TextMap') -> Dict[str, str]:
-        return {k: v for k, v in self.__maps__.items() if k not in old or v != old[k]}
+        return {k: v for k, v in self.__maps__.items() if v and k not in old or v != old[k]}
 
 
 class Localizable():
@@ -48,7 +48,7 @@ class Localizable():
     def __repr__(self) -> str:
         text = self.localize()
         if text:
-            return f"<{self.key} {text if len(text) <= 20 else text[:17]+'...'}>"
+            return f"<{self.key} {text}>"
         else:
             return f"<{self.key} #No translation#>"
 

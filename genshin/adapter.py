@@ -52,17 +52,20 @@ class JsonAdapter():
         self.__keys__.sort()
 
     def __eq__(self, o: 'JsonAdapter') -> bool:
+        if o is None:
+            return False
         return all(self.__dict__[x] == o.__dict__[y] for x, y in zip(self.__keys__, o.__keys__))
 
 
 class ConfigAdapter(Generic[T]):
     '''
-    Marking class with ConfigAdapter makes the class able to receive a list of objects to
-    construct itself, with corresponding JsonAdapter.
+    Marking class with ConfigAdapter makes the class able to receive a 
+    list of objects to construct itself, with corresponding JsonAdapter.
 
-    Note that this will also register `self` to `sele.__class__.__inst__`, as long as all the registry
-    and parsing are done per `RepoData`, this should make no conflict of different versions of
-    `RepoData`, since all data are stored in corresponding objects.
+    Note that this will also register `self` to `self.__class__.__inst__`,
+    as long as all the registry and parsing are done per `RepoData`, this
+    should make no conflict of different versions of `RepoData`, since 
+    all data are stored in corresponding objects.
     '''
     __inst__: 'ConfigAdapter[T]'
 

@@ -1,9 +1,14 @@
 
+import json
+from typing import Dict, List
+from genshin.rewards import Reward, RewardConfig
+from genshin.tags import TagConfig
+from genshin.enums.attr_type import BodyType, QualityType
 from genshin.enums.target import EquipPart
 from genshin.enums.item_type import MaterialType
 from genshin.genshin import RepoData
-import datetime
 
 
-repo = RepoData("./GenshinData", lang="EN", encoding="utf8")
-now = datetime.datetime()
+repo1_4 = RepoData("./GenshinData", lang="EN", encoding="utf8")
+
+print(repo1_4)

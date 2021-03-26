@@ -1,7 +1,7 @@
 from __future__ import annotations
 from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig, SkillUpgradeConfig
-from typing import Dict, List
-from genshin.adapter import JsonAdapter, MappedAdapter
+from typing import Dict, List, Type
+from genshin.adapter import ConfigAdapter, JsonAdapter, MappedAdapter, T
 from genshin.battlepass import BPMissionConfig, BPScheduleConfig
 from genshin.rewards import RewardConfig
 from genshin.events import ActivityConfig, TrialAvatarConfig, TrialDataConfig, TrialSetConfig
@@ -18,11 +18,12 @@ from os import path
 class RepoData():
     """
     A object representing DimBreath's GenshinData.
-    
+
     Calls and fields should be stable overtime, and any changes
     in original json structure will be reflected as a change in 
     parsing, not the fields, unless there're critical changes.
     """
+
     def json(self, json_name) -> List[Dict]:
         return json.load(open(path.join(self.excel_path, json_name), encoding=self.encoding))
 
@@ -31,7 +32,7 @@ class RepoData():
         # Supportives
         self.base_path = base_path
         self.textmap_path = path.join(base_path, "TextMap") if textmap is None else textmap
-        self.excel_path = path.join(base_path, "Excel") if excel is None else excel
+        self.excel_path = path.join(base_path, "ExcelBinOutput") if excel is None else excel
         self.encoding = encoding
         self.textmap = TextMap(self.textmap_path, "EN" if lang is None else lang)
 
@@ -64,10 +65,10 @@ class RepoData():
         self.bp_schedule = BPScheduleConfig(self.json("BattlePassScheduleExcelConfigData.json"))
         self.bp_mission = BPMissionConfig(self.json("BattlePassMissionExcelConfigData.json"))
 
-    def diff_id(self, previous: RepoData) -> Dict[str, Dict[int, JsonAdapter]]:
+    def diff(self, previous: RepoData) -> Dict[Type[MappedAdapter[T]], Dict[int, T]]:
         result = {}
         for k, v in self.__dict__.items():
             if isinstance(v, MappedAdapter):
                 p_v: MappedAdapter = previous.__dict__[k]
-                result[k] = {k1: v1 for k1, v1 in v.mappings.items() if k1 not in p_v}
-        return result
+                result[v.__class__] = v.diff(p_v)
+        return {k: v for k, v in result.items() if v}
