@@ -1,4 +1,5 @@
 from __future__ import annotations
+from genshin.shops import GoodConfig, ShopConfig
 from genshin.achievements import AchievementConfig
 from genshin.hangout import HangoutCGConfig
 from genshin.skills import ConstellationConfig, SkillConfig, SkillDepotConfig, SkillUpgradeConfig
@@ -56,6 +57,10 @@ class RepoData():
         self.avatars = AvatarConfig(self.json("AvatarExcelConfigData.json"))
         self.avatar_codex = AvatarCodexConfig(self.json("AvatarCodexExcelConfigData.json"))
         self.rewards = RewardConfig(self.json("RewardExcelConfigData.json"))
+
+        # Shops
+        self.shops = ShopConfig(self.json("ShopExcelConfigData.json"))
+        self.goods = GoodConfig(self.json("ShopGoodsExcelConfigData.json"))
 
         # Trials
         self.trial_avatars = TrialAvatarConfig(self.json("TrialAvatarExcelConfigData.json"), self.avatars, self.weapons)
