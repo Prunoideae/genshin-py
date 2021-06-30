@@ -21,7 +21,7 @@ class TagGroup(JsonAdapter):
 
     def __init__(self, entry: Dict, tags: TagConfig) -> None:
         super().__init__(entry)
-        self.tags = [tags.mappings[x] for x in self.tags]
+        self.tags = [tags.mappings[x] for x in self.tags if x in tags.mappings]
 
     def __repr__(self) -> str:
         return self.tags.__repr__()

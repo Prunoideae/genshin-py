@@ -9,13 +9,13 @@ class TextMap():
     __inst__: 'TextMap'
 
     def __init__(self, textmap: str, name: str) -> None:
-        self.__path__ = path.join(textmap, f"Text{name}.json")
-        self.__maps__: Dict[str, str] = json.load(open(self.__path__))
+        self.__path__ = path.join(textmap, f"TextMap{name}.json")
+        self.__maps__: Dict[str, str] = json.load(open(self.__path__, encoding="utf8"))
         self.__class__.__inst__ = self
 
     def reload(self, name: str, textmap: str = None):
-        self.__path__ = path.join(textmap if textmap is not None else path.dirname(self.__path__), f"Text{name}.json")
-        self.__maps__ = json.load(open(self.__path__))
+        self.__path__ = path.join(textmap if textmap is not None else path.dirname(self.__path__), f"TextMap{name}.json")
+        self.__maps__ = json.load(open(self.__path__, encoding="utf8"))
 
     def __getitem__(self, k: Union[str, int]) -> Union[None, str]:
         if type(k) is not str:
@@ -74,4 +74,5 @@ class LocalizeAdapter(JsonAdapter):
         super().__init__(entries)
         for k, v in self.__class__.__dict__.items():
             if isinstance(v, AdapterInst) and v.adapter == Localizable:
-                self.__dict__[k].set(TextMap.__inst__)
+                if self.__dict__[k]:
+                    self.__dict__[k].set(TextMap.__inst__)
